@@ -9,7 +9,7 @@ namespace AlienAppLibrary
     public class PlayerMaps
     {
 
-        public static void Map(PlayerRoom currentRoom)
+        public static void Map(MapRoom roomMap)
         {
             string[] maps =
             {
@@ -109,70 +109,6 @@ namespace AlienAppLibrary
             #endregion
          //[2]
 
-         #region hall1 map
-            @" 
- _______________________________________
-|                                       |
-|                                       |
-|________________   ____________________|
-|                                       |
-|________________   _____________   ____|
-|         |                |            |
-|         |                |            |
-|         |              __|_____   ____|
-|_____   _|             |               |
-|   |                   |               |
-|   |                   |               |
-|   |_______                            |
-|   |       |           |               |
-|   |       |           |               |
-| !         |___________|__________   __|
-|   |                                   |
-|   |        ______________________   __|
-|   |_______|                   |       |
-|   |     |                     |       |
-|   |     |                     |       |
-|   |     |                     |       |
-|   |_  __|_____________________|__   __|
-|                                       |
-|__________________   __________________|
-|                                       |
-|_______________________________________|", 
-	#endregion 
-         //[3]
-
-         #region deadEnd1
-		@"
- _______________________________________
-|                                       |
-|                                       |
-|________________   ____________________|
-|                                       |
-|________________   _____________   ____|
-|         |                |            |
-|         |                |            |
-|         |              __|_____   ____|
-|_____   _|             |               |
-| ! |                   |               |
-|   |                   |               |
-|   |_______                            |
-|   |       |           |               |
-|   |       |           |               |
-|           |___________|__________   __|
-|   |                                   |
-|   |        ______________________   __|
-|   |_______|                   |       |
-|   |     |                     |       |
-|   |     |                     |       |
-|   |     |                     |       |
-|   |_  __|_____________________|__   __|
-|                                       |
-|__________________   __________________|
-|                                       |
-|_______________________________________|", 
-	#endregion
-         //[4]
-
          #region bathroom
 		@"
  _______________________________________
@@ -204,7 +140,7 @@ namespace AlienAppLibrary
 |_______________________________________|", 
 	#endregion
         
-         //[5]
+         //[3]
 
          #region mensQuartersHall
 		@"
@@ -236,7 +172,7 @@ namespace AlienAppLibrary
 |                                       |
 |_______________________________________|", 
 	#endregion
-         //[6]
+         //[4]
 
          #region messHall
 		@"
@@ -268,7 +204,7 @@ namespace AlienAppLibrary
 |                                       |
 |_______________________________________|", 
 	#endregion
-         //[7]
+         //[5]
 
          #region kitchen
 		@"
@@ -300,7 +236,7 @@ namespace AlienAppLibrary
 |                                       |
 |_______________________________________|", 
 	#endregion
-         //[8]
+         //[6]
 
          #region observationRoom
 		@"
@@ -332,7 +268,7 @@ namespace AlienAppLibrary
 |                                       |
 |_______________________________________|", 
 	#endregion
-         //[9]
+         //[7]
 
          #region containmentRoom
 		@"
@@ -364,39 +300,7 @@ namespace AlienAppLibrary
 |                                       |
 |_______________________________________|", 
 	#endregion
-         //[10]
-
-         #region cargoBayHallDEndRight
-		@"
- _______________________________________
-|                                       |
-|                                       |
-|________________   ____________________|
-|                                      !|
-|________________   _____________   ____|
-|         |                |            |
-|         |                |            |
-|         |              __|_____   ____|
-|_____   _|             |               |
-|   |                   |               |
-|   |                   |               |
-|   |_______                            |
-|   |       |           |               |
-|   |       |           |               |
-|           |___________|__________   __|
-|   |                                   |
-|   |        ______________________   __|
-|   |_______|                   |       |
-|   |     |                     |       |
-|   |     |                     |       |
-|   |     |                     |       |
-|   |_  __|_____________________|__   __|
-|                                       |
-|__________________   __________________|
-|                                       |
-|_______________________________________|", 
-	#endregion
-         //[11]
+         //[8]
 
          #region cargoBay
 		@"
@@ -428,50 +332,41 @@ namespace AlienAppLibrary
 |                                       |
 |_______________________________________|", 
 	#endregion
-         //[12]
+         //[9]
         };//endMaps[]
-
-           switch (currentRoom)
+           
+           switch (roomMap)
             {
-                case PlayerRoom.startingPoint:
+                case MapRoom.startingPoint:
                     Console.WriteLine(maps[0]);
                     break;
 
-                case PlayerRoom.storageRoom:
+                case MapRoom.storageRoom:
                     Console.WriteLine(maps[1]);
                     break;
-                case PlayerRoom.commonArea:
+                case MapRoom.commonArea:
                     Console.WriteLine(maps[2]);
                     break;
-                case PlayerRoom.hall1:
+                case MapRoom.bathroom:
                     Console.WriteLine(maps[3]);
                     break;
-                case PlayerRoom.deadEnd:
+                case MapRoom.mensQuartersHall:
                     Console.WriteLine(maps[4]);
                     break;
-                case PlayerRoom.bathroom:
+                case MapRoom.messHall:
                     Console.WriteLine(maps[5]);
                     break;
-                case PlayerRoom.mensQuartersHall:
+                case MapRoom.kitchen:
                     Console.WriteLine(maps[6]);
                     break;
-                case PlayerRoom.messHall:
+                case MapRoom.observationRoom:
                     Console.WriteLine(maps[7]);
                     break;
-                case PlayerRoom.kitchen:
+                case MapRoom.containmentRoom:
                     Console.WriteLine(maps[8]);
                     break;
-                case PlayerRoom.observationRoom:
+                case MapRoom.cargoBay:
                     Console.WriteLine(maps[9]);
-                    break;
-                case PlayerRoom.containmentRoom:
-                    Console.WriteLine(maps[10]);
-                    break;
-                case PlayerRoom.cargoBayHallDEndRight:
-                    Console.WriteLine(maps[11]);
-                    break;
-                case PlayerRoom.cargoBay:
-                    Console.WriteLine(maps[6]);
                     break;
             };
             

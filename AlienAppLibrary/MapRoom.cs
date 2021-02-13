@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlienAppLibrary
 {
-    public enum PlayerRoom
+    public enum MapRoom
     {
         startingPoint,
         storageRoom,
