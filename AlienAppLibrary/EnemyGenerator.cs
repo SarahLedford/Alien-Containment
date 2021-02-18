@@ -18,7 +18,7 @@ namespace AlienAppLibrary
             {
             crewMember, crewMember, android, android, android, xenomorph
             };
-            bool isAnEnemy = new Random().Next(1, 11) <= 0 ? true : false;//TODO tweak stats for more balanced combat
+            bool isAnEnemy = new Random().Next(1, 11) <= 5 ? true : false;
             if (isAnEnemy == true)
             {
                 Random rand = new Random();

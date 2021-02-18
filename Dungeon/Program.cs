@@ -18,14 +18,15 @@ namespace Dungeon
             bool enemyHasBeenFought = false;
             bool isContainmentClear = false;
 
-            Console.WriteLine("Welcome to my game, and thank you for playing!\nAlien: Containment is created to be a unique experience every time you play. You never know when you're going to meet an enemy, or who it will be.\nYour goal is to survive long enough to initiate the security protocols to recapture the xenomorph or to kill it once and for all. The choice will be yours.\nEnjoy!\nPress any key to continue...");
+            Console.WriteLine("Welcome to my game, and thank you for playing!\nAlien: Containment is created to be a unique experience every time you play. You never know when you're going to meet an enemy, or who it will be.\nYour goal is to reach the cargo bay and survive long enough to kill the alien once and for all.\nEnjoy!\nPress any key to continue...");
             Console.ReadKey();
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Weapon flamethrower = new Weapon("Flamethrower", 50, 60, 15);
+            Weapon flamethrower = new Weapon("Flamethrower", 20, 30, 15);
             Weapon pistol = new Weapon("Pistol", 10, 20, 2);
-            Player player = new Player(50, 100, 25, 50, 150, pistol, "You", score);
+            Player player = new Player(100, 100, 25, 50, 20, pistol, "You", score);
+            Enemy xenomorph = new Enemy(110, 110, 30, 30, 20, 15, 25, "It towers over you as you fight the urge to scream. It's smooth black body slithers and twitches.\nHere it comes.", "xenomorph");
 
             Console.WriteLine("You start awake, trying to catch your breath, which seems just out of reach.\n" +
                 "Alarms are blaring, lights strobing all around you. You only take a moment to ground yourself and remember where you are,\nand to realize what must have happened.");
@@ -73,16 +74,16 @@ namespace Dungeon
 
             do
             {
-                Room start = new Room("Women's CryoSleep Quarters", "There are cryosleep chambers all around you. They were supposed to be holding your crewmembers, but they aren't there. There's blood on one of the chambers. You throw on a pair of sweats and a shirt that you had set out for yourself before you went to sleep. Your gun is there also.\nTime to see what it can do.", true);
-                Room storage = new Room("Storage Room", "The storage room is a dead end, but you didn't come here to hide. You look around for anything that might help you a little bit more than this measly handgun they issued you. Your eyes scan the room as you quickly shuffle through the content scattered on the shelves when something catches your eye -- a flamethrower in the corner.", false);
+                Room start = new Room("Women's CryoSleep Quarters", "There are cryosleep chambers all around you. They were supposed to be holding your crewmembers, but they aren't there. There's blood on one of the chambers. You check the ship's stats as you throw on a pair of sweats and a shirt that you had set out for yourself before you went to sleep.\nYou stop in your steps as you read the logs. That can't be right... but somehow you know it is.\nThe escape pods are gone - all except one.\nThat's where you have to go. Your gun is on the table next to you.\nTime to see what it can do.", true);
+                Room storage = new Room("Storage Room", "The storage room is a dead end, but you didn't come here to hide. You look around for anything that might help you a little bit more than this measly pistol they issued you. Your eyes scan the room as you quickly shuffle through the content scattered on the shelves when something catches your eye -- a flamethrower in the corner.", false);
                 Room common = new Room("Common Area", "So many fond memories. You find it surprisingly difficult not to reminisce even amidst all of the madness unfolding around you. This room is where some of your fondest memories have come from -- laughing like fools, fighting like even bigger fools. The entire crew is the only family you have. You push the thoughts down and press forward.\nIt feels like every sound is amplified by a thousand. Every noise you make, you are hyper-aware of. You hope it's just the adrenaline pumping through you, but you can't help but feel like you're being watched.", false);
                 Room bathroom = new Room("Bathrooms", "There is more blood streaking the floor, leading from the shower. You wonder if someone was taking a shower when they got attacked, or if it was their only place to hide. If it was, you suppose it wasn't good enough.", false);
-                Room mensQuarters = new Room("Men's Quarters Hall", "You have to see if anyone might still be alive. The Company doesn't want to deal with any pregnancy complications on these long missions, so they make sure only men can get into the men's quarters and vice versa. You try as hard as you can to manually open the doors, but something's blocking it from the inside.", false);
+                Room mensQuarters = new Room("Men's Quarters Hall", "You have to see if anyone might still be alive still be here. You try as hard as you can to manually open the doors, but you aren't strong enough, and your keycard won't work for the men's quarters.", false);
                 Room messHall = new Room("Mess Hall", "There has clearly been a struggle here. Empty trays clutter the floor and the salt and pepper are still rolling from their fall. Whoever was here isn't far.", false);
-                Room kitchen = new Room("Kitchen", "The top half of one of the ship's androids is slouched in the corner, white liquid slithering its way across the floor. It's still twitching every now and then, but it's clear that there's nothing left of it. Whatever did that, you don't want to be around to meet it, though you already know what did it.\nYou search the room for any knives or other helpful tools that you could take with you as an extra precaution. You curse to yourself as you come up empty-handed, cursing the androids that usually make the meals. There's no way of telling where they kept them, but you were sure you had seen some knives here before. Where would they have taken them?", false);
+                Room kitchen = new Room("Kitchen", "The top half of one of the ship's androids is slouched in the corner, white liquid slithering its way across the floor. It's still twitching every now and then, but it's clear that it's inoperable. Whatever did that, you don't want to be around to meet it.", false);
                 Room observationRoom = new Room("Observation Room", "You enter the room with extreme caution. It's dark, lit intermittently only by the strobing emergency lights.", false);
                 Room containment = new Room("Containment Room", "You shiver as you enter. You shouldn't be here. There are eggs all around, at least a dozen. They start to open, all at once, giving birth to whatever has been growing inside of them...", false);
-                Room cargoBay = new Room("Cargo Bay", "Here is where you will face the xenomorph and either capture it for study or kill it", false);//TODO finish Cargo Bay description
+                Room cargoBay = new Room("Cargo Bay", "Here is where you will face the xenomorph and either capture it for study or kill it", false);
                 Console.ReadKey();
                 Console.Clear();
                 Console.Title = "Women's Quarters";
@@ -1281,53 +1282,67 @@ namespace Dungeon
                     {
                         Console.Title = "Cargo Bay";
                         Console.Clear();
-                        Console.WriteLine($"{cargoBay}\n" +
-                            $"1. Kill\n" +
-                            $"2. Capture\n" +
-                            $"3. Exit");
-                        switch (Console.ReadKey().Key)
+                        bool isFinished = false;
+                        Console.Clear();
+                        Console.WriteLine($"The {xenomorph.Name} lunges towards you!");
+                        do
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                Console.Clear();
-                                Console.WriteLine("You kill the alien");
-                                Console.ReadKey();
-                                break;//TODO add functionality to kill alien
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                Console.Clear();
-                                Console.WriteLine("You captured the alien");
-                                Console.ReadKey();
-                                break;//TODO add functionality to capture the alien
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
+                            Console.WriteLine("1. Attack\n" +
+                                "2. HUD\n" +
+                                "3. Enemy stats");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.NumPad1:
+                                case ConsoleKey.D1:
+                                    Console.Clear();
+                                    Combat.Battle(player, xenomorph);
+                                    if (xenomorph.Life < 1)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                                        Console.WriteLine($"The {xenomorph.Name} is dead.");
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        isFinished = true;
                                         cargoBay.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                        score++;
+                                    }
+                                    break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
+                                case ConsoleKey.NumPad2:
+                                case ConsoleKey.D2:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    break;
 
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                case ConsoleKey.NumPad3:
+                                case ConsoleKey.D3:
+                                    Console.Clear();
+                                    Console.WriteLine(xenomorph);
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    Console.WriteLine("You can't do that right now!");
+                                    break;
+                            }
+                            if (player.Life < 1)
+                            {
+                                Console.WriteLine($"You died by the {xenomorph.Name}.\n");
+                                exitGame = true;
+                            }
+                        } while (isFinished != true);
+
+                        Console.WriteLine($"It's over. You rush to the last escape pod, get in, and leave.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("You survived.");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.ReadKey();
+                        cargoBay.IsCurrentRoom = false;
+                        exitGame = true;
                     }
-                    #endregion 
+                    #endregion
+                    
                 } while (start.IsCurrentRoom == true || storage.IsCurrentRoom == true || common.IsCurrentRoom == true || bathroom.IsCurrentRoom == true || mensQuarters.IsCurrentRoom == true || messHall.IsCurrentRoom == true || kitchen.IsCurrentRoom == true || observationRoom.IsCurrentRoom == true || containment.IsCurrentRoom == true || cargoBay.IsCurrentRoom == true);//end while rooms true
             } while (exitGame != true);
             Console.Clear();
