@@ -21,8 +21,7 @@ namespace AlienAppLibrary
 
         public override string ToString()
         {
-            return string.Format($"{Name}\n" +
-                $"{Description}");
+            return string.Format($"{Description}");
         }
     }
 }

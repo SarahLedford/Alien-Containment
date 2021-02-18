@@ -19,7 +19,7 @@ namespace AlienAppLibrary
                 defender.Life -= damageDealt;
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine($"{attacker.Name} hit {defender.Name} for {damageDealt} damage!");
-                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Green;
             }//end if
             else
             {
@@ -33,7 +33,7 @@ namespace AlienAppLibrary
             int playerSpeed = random.Next(1, 11) + player.Speed;
             System.Threading.Thread.Sleep(25);
             int monsterSpeed = random.Next(1, 11) + enemy.Speed;
-            Console.WriteLine($"{(playerSpeed >= monsterSpeed ? $"{player.Name}" : $"{ enemy.Name}")}  attacks first!");
+            Console.WriteLine($"{(playerSpeed >= monsterSpeed ? $"{player.Name} attack first!" : $"The { enemy.Name} attacks first!")}");
             if (playerSpeed >= monsterSpeed)
             {
                 Attack(player, enemy);

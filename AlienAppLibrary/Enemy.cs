@@ -33,6 +33,7 @@ namespace AlienAppLibrary
         public override int CalcDamage()
         {
             return new Random().Next(MinDamage, MaxDamage + 1);
-        }
+        } 
+        
     }
 }
