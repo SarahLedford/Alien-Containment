@@ -74,6 +74,7 @@ namespace Dungeon
 
             do
             {
+                #region Rooms
                 Room start = new Room("Women's CryoSleep Quarters", "There are cryosleep chambers all around you. They were supposed to be holding your crewmembers, but they aren't there. There's blood on one of the chambers. You check the ship's stats as you throw on a pair of sweats and a shirt that you had set out for yourself before you went to sleep.\nYou stop in your steps as you read the logs. That can't be right... but somehow you know it is.\nThe escape pods are gone - all except one.\nThat's where you have to go. Your gun is on the table next to you.\nTime to see what it can do.", true);
                 Room storage = new Room("Storage Room", "The storage room is a dead end, but you didn't come here to hide. You look around for anything that might help you a little bit more than this measly pistol they issued you. Your eyes scan the room as you quickly shuffle through the content scattered on the shelves when something catches your eye -- a flamethrower in the corner.", false);
                 Room common = new Room("Common Area", "So many fond memories. You find it surprisingly difficult not to reminisce even amidst all of the madness unfolding around you. This room is where some of your fondest memories have come from -- laughing like fools, fighting like even bigger fools. The entire crew is the only family you have. You push the thoughts down and press forward.\nIt feels like every sound is amplified by a thousand. Every noise you make, you are hyper-aware of. You hope it's just the adrenaline pumping through you, but you can't help but feel like you're being watched.", false);
@@ -83,7 +84,8 @@ namespace Dungeon
                 Room kitchen = new Room("Kitchen", "The top half of one of the ship's androids is slouched in the corner, white liquid slithering its way across the floor. It's still twitching every now and then, but it's clear that it's inoperable. Whatever did that, you don't want to be around to meet it.", false);
                 Room observationRoom = new Room("Observation Room", "You enter the room with extreme caution. It's dark, lit intermittently only by the strobing emergency lights.", false);
                 Room containment = new Room("Containment Room", "You shiver as you enter. You shouldn't be here. There are eggs all around, at least a dozen. They start to open, all at once, giving birth to whatever has been growing inside of them...", false);
-                Room cargoBay = new Room("Cargo Bay", "Here is where you will face the xenomorph and either capture it for study or kill it", false);
+                Room cargoBay = new Room("Cargo Bay", "Here is where you will face the xenomorph and either capture it for study or kill it", false); 
+                #endregion
                 Console.ReadKey();
                 Console.Clear();
                 Console.Title = "Women's Quarters";
