@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AlienAppLibrary;
-
+using SpecialEnemyLibrary;
 
 namespace Dungeon
 {
@@ -26,7 +26,8 @@ namespace Dungeon
             Weapon flamethrower = new Weapon("Flamethrower", 20, 30, 15);
             Weapon pistol = new Weapon("Pistol", 10, 20, 2);
             Player player = new Player(100, 100, 25, 50, 20, pistol, "You", score);
-            Enemy xenomorph = new Enemy(110, 110, 30, 30, 20, 15, 25, "It towers over you as you fight the urge to scream. It's smooth black body slithers and twitches.\nHere it comes.", "xenomorph");
+            bool isXenoQueen = new Random().Next(1, 11) <= 5 ? true : false;
+            BossXeno boss = new BossXeno(110, 110, 30, 30, 20, 15, 25, "It towers over you as you fight the urge to scream. It's smooth black body slithers and twitches.\nHere it comes.", "xenomorph", isXenoQueen);
 
             Console.WriteLine("You start awake, trying to catch your breath, which seems just out of reach.\n" +
                 "Alarms are blaring, lights strobing all around you. You only take a moment to ground yourself and remember where you are,\nand to realize what must have happened.");
@@ -1286,7 +1287,7 @@ namespace Dungeon
                         Console.Clear();
                         bool isFinished = false;
                         Console.Clear();
-                        Console.WriteLine($"The {xenomorph.Name} lunges towards you!");
+                        Console.WriteLine($"The {boss.Name} lunges towards you!");
                         do
                         {
                             Console.WriteLine("1. Attack\n" +
@@ -1297,11 +1298,11 @@ namespace Dungeon
                                 case ConsoleKey.NumPad1:
                                 case ConsoleKey.D1:
                                     Console.Clear();
-                                    Combat.Battle(player, xenomorph);
-                                    if (xenomorph.Life < 1)
+                                    Combat.Battle(player, boss);
+                                    if (boss.Life < 1)
                                     {
                                         Console.ForegroundColor = ConsoleColor.DarkRed;
-                                        Console.WriteLine($"The {xenomorph.Name} is dead.");
+                                        Console.WriteLine($"The {boss.Name} is dead.");
                                         Console.ReadKey();
                                         Console.Clear();
                                         Console.ForegroundColor = ConsoleColor.Green;
@@ -1320,7 +1321,7 @@ namespace Dungeon
                                 case ConsoleKey.NumPad3:
                                 case ConsoleKey.D3:
                                     Console.Clear();
-                                    Console.WriteLine(xenomorph);
+                                    Console.WriteLine(boss);
                                     break;
 
                                 default:
@@ -1330,7 +1331,7 @@ namespace Dungeon
                             }
                             if (player.Life < 1)
                             {
-                                Console.WriteLine($"You died by the {xenomorph.Name}.\n");
+                                Console.WriteLine($"You died by the {boss.Name}.\n");
                                 exitGame = true;
                             }
                         } while (isFinished != true);
