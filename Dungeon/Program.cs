@@ -24,10 +24,10 @@ namespace Dungeon
             Console.ForegroundColor = ConsoleColor.Green;
 
             Weapon flamethrower = new Weapon("Flamethrower", 20, 30, 15);
-            Weapon pistol = new Weapon("Pistol", 10, 20, 2);
-            Player player = new Player(100, 100, 25, 50, 20, pistol, "You", score);
+            Weapon pistol = new Weapon("Pistol", 10, 20, 5);
+            Player player = new Player(100, 100, 5, 50, 20, pistol, "You", score);
             bool isXenoQueen = new Random().Next(1, 11) <= 5 ? true : false;
-            BossXeno boss = new BossXeno(110, 110, 30, 30, 20, 15, 25, "It towers over you as you fight the urge to scream. It's smooth black body slithers and twitches.\nHere it comes.", "xenomorph", isXenoQueen);
+            BossXeno boss = new BossXeno(110, 110, 10, 30, 20, 15, 25, "It towers over you as you fight the urge to scream. It's smooth black body slithers and twitches.\nHere it comes.", "xenomorph", isXenoQueen);
 
             Console.WriteLine("You start awake, trying to catch your breath, which seems just out of reach.\n" +
                 "Alarms are blaring, lights strobing all around you. You only take a moment to ground yourself and remember where you are,\nand to realize what must have happened.");
@@ -168,7 +168,7 @@ namespace Dungeon
                     #endregion
 
                     #region storage room
-                    while (storage.IsCurrentRoom == true)
+                    while (storage.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Storage Room";
                         #region combat
@@ -219,7 +219,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -240,72 +240,78 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine($"{(player.EquippedWeapon == flamethrower ? $"{storage}\n1. Take flamethrower (already equipped)\n2. Go back to women's quarters\n3. HUD\n4. Map\n5. Exit" : $"{storage}\n1. Take flamethrower\n2. Go back to women's quarters\n3. HUD\n4. Map\n5. Exit")}");
-                        switch (Console.ReadKey().Key)
+                        while (storage.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                Console.Clear();
-                                Console.WriteLine($"{(player.EquippedWeapon == flamethrower ? "You already have the flamethrower." : "You picked up the flamethrower.")}");
-                                player.EquippedWeapon = flamethrower;
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                storage.IsCurrentRoom = false;
-                                start.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.storageRoom);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
-                                        storage.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                            Console.WriteLine($"{(player.EquippedWeapon == flamethrower ? $"{storage}\n1. Take flamethrower (already equipped)\n2. Go back to women's quarters\n3. HUD\n4. Map\n5. Exit" : $"{storage}\n1. Take flamethrower\n2. Go back to women's quarters\n3. HUD\n4. Map\n5. Exit")}");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    Console.Clear();
+                                    Console.WriteLine($"{(player.EquippedWeapon == flamethrower ? "You already have the flamethrower." : "You picked up the flamethrower.")}");
+                                    player.EquippedWeapon = flamethrower;
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    storage.IsCurrentRoom = false;
+                                    start.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.storageRoom);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
+                                            storage.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end storage 
                     #endregion
 
                     enemyHasBeenFought = false;
 
                     #region Common Room
-                    while (common.IsCurrentRoom == true)
+                    while (common.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Common Area";
                         #region combat
@@ -355,7 +361,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -376,87 +382,93 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine($"{common}\n" +
-                            $"1. Enter mess hall\n" +
-                            $"2. Enter men's quarters\n" +
-                            $"3. Go back to women's quarters\n" +
-                            $"4. HUD\n" +
-                            $"5. Map\n" +
-                            $"6. Exit");
-
-                        switch (Console.ReadKey().Key)
+                        while (common.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                Console.Clear();
-                                Console.WriteLine("You try to exit the the common area, but the door that leads that way is jammed.");
-                                Console.ReadKey();
-                                break;
+                            Console.WriteLine($"{common}\n" +
+                                           $"1. Enter mess hall\n" +
+                                           $"2. Enter men's quarters\n" +
+                                           $"3. Go back to women's quarters\n" +
+                                           $"4. HUD\n" +
+                                           $"5. Map\n" +
+                                           $"6. Exit");
 
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                Console.Clear();
-                                Console.WriteLine("You try to exit the the common area, but the door that leads that way is jammed.");
-                                Console.ReadKey();
-                                break;
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    Console.Clear();
+                                    Console.WriteLine("You try to exit the the common area, but the door that leads that way is jammed.");
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                common.IsCurrentRoom = false;
-                                start.IsCurrentRoom = true;
-                                break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    Console.Clear();
+                                    Console.WriteLine("You try to exit the the common area, but the door that leads that way is jammed.");
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    common.IsCurrentRoom = false;
+                                    start.IsCurrentRoom = true;
+                                    break;
 
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.commonArea);
-                                Console.ReadKey();
-                                break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D6:
-                            case ConsoleKey.NumPad6:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.commonArea);
+                                    Console.ReadKey();
+                                    break;
 
-                                        common.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                case ConsoleKey.D6:
+                                case ConsoleKey.NumPad6:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                            common.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
+
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end Common Area 
                     #endregion
 
                     enemyHasBeenFought = false;
 
                     #region Bathroom
-                    while (bathroom.IsCurrentRoom == true)
+                    while (bathroom.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Bathroom";
                         #region combat
@@ -506,7 +518,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -527,90 +539,96 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine($"{bathroom}\n" +
-                            $"1. Enter men's quarters\n" +
-                            $"2. Enter common area\n" +
-                            $"3. Enter mess hall\n" +
-                            $"4. Go back to women's quarters\n" +
-                            $"5. HUD\n" +
-                            $"6. Map\n" +
-                            $"7. Exit");
-                        switch (Console.ReadKey().Key)
+                        while (bathroom.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                bathroom.IsCurrentRoom = false;
-                                mensQuarters.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                Console.Clear();
-                                Console.WriteLine("You try to open the common area door, but something is jamming the mechanism. You try to force it, but it's no use.");
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                bathroom.IsCurrentRoom = false;
-                                messHall.IsCurrentRoom = true;
-                                break;
+                            Console.WriteLine($"{bathroom}\n" +
+                                            $"1. Enter men's quarters\n" +
+                                            $"2. Enter common area\n" +
+                                            $"3. Enter mess hall\n" +
+                                            $"4. Go back to women's quarters\n" +
+                                            $"5. HUD\n" +
+                                            $"6. Map\n" +
+                                            $"7. Exit");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    bathroom.IsCurrentRoom = false;
+                                    mensQuarters.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    Console.Clear();
+                                    Console.WriteLine("You try to open the common area door, but something is jamming the mechanism. You try to force it, but it's no use.");
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    bathroom.IsCurrentRoom = false;
+                                    messHall.IsCurrentRoom = true;
+                                    break;
 
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                bathroom.IsCurrentRoom = false;
-                                start.IsCurrentRoom = true;
-                                break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    bathroom.IsCurrentRoom = false;
+                                    start.IsCurrentRoom = true;
+                                    break;
 
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D6:
-                            case ConsoleKey.NumPad6:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.bathroom);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D7:
-                            case ConsoleKey.NumPad7:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
-                                        bathroom.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D6:
+                                case ConsoleKey.NumPad6:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.bathroom);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D7:
+                                case ConsoleKey.NumPad7:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
+                                            bathroom.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end bathroom 
                     #endregion
 
                     enemyHasBeenFought = false;
 
                     #region Mens Quarters
-                    while (mensQuarters.IsCurrentRoom == true)
+                    while (mensQuarters.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Men's Quarters";
                         #region combat
@@ -660,7 +678,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -681,84 +699,90 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine($"{mensQuarters}\n" +
-                            $"1. Enter common area\n" +
-                            $"2. Enter mess hall\n" +
-                            $"3. Go back to bathroom\n" +
-                            $"4. HUD\n" +
-                            $"5. Map\n" +
-                            $"6. Exit");
-                        switch (Console.ReadKey().Key)
+                        while (mensQuarters.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                Console.Clear();
-                                Console.WriteLine("You try to open the common area door, but something is jamming the mechanism. You try to force it, but it's no use.");
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                mensQuarters.IsCurrentRoom = false;
-                                messHall.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                mensQuarters.IsCurrentRoom = false;
-                                bathroom.IsCurrentRoom = true;
-                                break;
+                            Console.WriteLine($"{mensQuarters}\n" +
+                                            $"1. Enter common area\n" +
+                                            $"2. Enter mess hall\n" +
+                                            $"3. Go back to bathroom\n" +
+                                            $"4. HUD\n" +
+                                            $"5. Map\n" +
+                                            $"6. Exit");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    Console.Clear();
+                                    Console.WriteLine("You try to open the common area door, but something is jamming the mechanism. You try to force it, but it's no use.");
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    mensQuarters.IsCurrentRoom = false;
+                                    messHall.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    mensQuarters.IsCurrentRoom = false;
+                                    bathroom.IsCurrentRoom = true;
+                                    break;
 
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.mensQuartersHall);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D6:
-                            case ConsoleKey.NumPad6:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
-                                        mensQuarters.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.mensQuartersHall);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D6:
+                                case ConsoleKey.NumPad6:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
+                                            mensQuarters.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end Mens Quarters 
                     #endregion
 
                     enemyHasBeenFought = false;
 
                     #region Mess Hall
-                    while (messHall.IsCurrentRoom == true)
+                    while (messHall.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Mess Hall";
                         #region combat
@@ -808,7 +832,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -829,89 +853,95 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine($"{messHall}\n" +
-                            $"1. Enter observation room\n" +
-                            $"2. Enter kitchen\n" +
-                            $"3. Go back to mens quarters\n" +
-                            $"4. Go back to bathroom\n" +
-                            $"5. HUD\n" +
-                            $"6. Map\n" +
-                            $"7. Exit");
-                        switch (Console.ReadKey().Key)
+                        while (messHall.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                messHall.IsCurrentRoom = false;
-                                observationRoom.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                messHall.IsCurrentRoom = false;
-                                kitchen.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                messHall.IsCurrentRoom = false;
-                                mensQuarters.IsCurrentRoom = true;
-                                break;
+                            Console.WriteLine($"{messHall}\n" +
+                                           $"1. Enter observation room\n" +
+                                           $"2. Enter kitchen\n" +
+                                           $"3. Go back to mens quarters\n" +
+                                           $"4. Go back to bathroom\n" +
+                                           $"5. HUD\n" +
+                                           $"6. Map\n" +
+                                           $"7. Exit");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    messHall.IsCurrentRoom = false;
+                                    observationRoom.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    messHall.IsCurrentRoom = false;
+                                    kitchen.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    messHall.IsCurrentRoom = false;
+                                    mensQuarters.IsCurrentRoom = true;
+                                    break;
 
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                messHall.IsCurrentRoom = false;
-                                bathroom.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D6:
-                            case ConsoleKey.NumPad6:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.messHall);
-                                Console.ReadKey();
-                                break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    messHall.IsCurrentRoom = false;
+                                    bathroom.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D6:
+                                case ConsoleKey.NumPad6:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.messHall);
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D7:
-                            case ConsoleKey.NumPad7:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
-                                        messHall.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                case ConsoleKey.D7:
+                                case ConsoleKey.NumPad7:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
+                                            messHall.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }//end exit switch
-                                break;
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            break;
+                                    }//end exit switch
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end Mess Hall 
                     #endregion
 
                     enemyHasBeenFought = false;
 
                     #region Kitchen
-                    while (kitchen.IsCurrentRoom == true)
+                    while (kitchen.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Kitchen";
                         #region combat
@@ -961,7 +991,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -982,76 +1012,82 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine($"{kitchen}\n" +
-                            $"1. Enter cargo bay\n" +
-                            $"2. Go back to mess hall\n" +
-                            $"3. HUD\n" +
-                            $"4. Map\n" +
-                            $"5. Exit");
-                        switch (Console.ReadKey().Key)
+                        while (kitchen.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                kitchen.IsCurrentRoom = false;
-                                cargoBay.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                kitchen.IsCurrentRoom = false;
-                                messHall.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.kitchen);
-                                Console.ReadKey();
-                                break;
+                            Console.WriteLine($"{kitchen}\n" +
+                                            $"1. Enter cargo bay\n" +
+                                            $"2. Go back to mess hall\n" +
+                                            $"3. HUD\n" +
+                                            $"4. Map\n" +
+                                            $"5. Exit");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    kitchen.IsCurrentRoom = false;
+                                    cargoBay.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    kitchen.IsCurrentRoom = false;
+                                    messHall.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.kitchen);
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
-                                        kitchen.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
+                                            kitchen.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end Kitchen 
                     #endregion
 
                     enemyHasBeenFought = false;
 
                     #region Observation Room
-                    while (observationRoom.IsCurrentRoom == true)
+                    while (observationRoom.IsCurrentRoom == true && exitGame != true)
                     {
 
                         Console.Title = "Observation Room";
@@ -1102,7 +1138,7 @@ namespace Dungeon
                                             Console.ForegroundColor = ConsoleColor.Green;
                                             enemyHasBeenFought = true;
                                             isFinished = true;
-                                            score++;
+                                            player.Kills++;
                                         }
                                         break;
 
@@ -1123,74 +1159,80 @@ namespace Dungeon
                                 }
                                 if (player.Life < 1)
                                 {
-                                    Console.WriteLine($"You died by the {currentE.Name}.\n");
+                                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                                    Console.WriteLine($"\nYou died by the {currentE.Name}.\nPress any key to continue...");
+                                    Console.ReadKey();
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     exitGame = true;
                                 }
-                            } while (isFinished != true);
+                            } while (isFinished != true && exitGame != true);
                         }
                         #endregion
-                        Console.WriteLine(observationRoom);
-                        Console.Write($"{(player.Life < player.MaxLife ? "You need to get patched up. You see an emergency kit on one of the desks.\nH. Heal\n" : "")}");
-                        Console.WriteLine($"1. Enter containment room\n" +
-                            $"2. Go back to mess hall\n" +
-                            $"3. HUD\n" +
-                            $"4. Map\n" +
-                            $"5. Exit");
-                        switch (Console.ReadKey().Key)
+                        while (observationRoom.IsCurrentRoom == true && exitGame != true)
                         {
-                            case ConsoleKey.H:
-                                player.Life = player.MaxLife;
-                                Console.WriteLine("Your health has increased to max.");
-                                break;
-                            case ConsoleKey.D1:
-                            case ConsoleKey.NumPad1:
-                                observationRoom.IsCurrentRoom = false;
-                                containment.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D2:
-                            case ConsoleKey.NumPad2:
-                                observationRoom.IsCurrentRoom = false;
-                                messHall.IsCurrentRoom = true;
-                                break;
-                            case ConsoleKey.D3:
-                            case ConsoleKey.NumPad3:
-                                Console.Clear();
-                                Console.WriteLine(player);
-                                Console.ReadKey();
-                                break;
-                            case ConsoleKey.D4:
-                            case ConsoleKey.NumPad4:
-                                Console.Clear();
-                                PlayerMaps.Map(MapRoom.observationRoom);
-                                Console.ReadKey();
-                                break;
+                            Console.WriteLine(observationRoom);
+                            Console.Write($"{(player.Life < player.MaxLife ? "You need to get patched up. You see an emergency kit on one of the desks.\nH. Heal\n" : "")}");
+                            Console.WriteLine($"1. Enter containment room\n" +
+                                $"2. Go back to mess hall\n" +
+                                $"3. HUD\n" +
+                                $"4. Map\n" +
+                                $"5. Exit");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.H:
+                                    player.Life = player.MaxLife;
+                                    Console.WriteLine("Your health has increased to max.");
+                                    break;
+                                case ConsoleKey.D1:
+                                case ConsoleKey.NumPad1:
+                                    observationRoom.IsCurrentRoom = false;
+                                    containment.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D2:
+                                case ConsoleKey.NumPad2:
+                                    observationRoom.IsCurrentRoom = false;
+                                    messHall.IsCurrentRoom = true;
+                                    break;
+                                case ConsoleKey.D3:
+                                case ConsoleKey.NumPad3:
+                                    Console.Clear();
+                                    Console.WriteLine(player);
+                                    Console.ReadKey();
+                                    break;
+                                case ConsoleKey.D4:
+                                case ConsoleKey.NumPad4:
+                                    Console.Clear();
+                                    PlayerMaps.Map(MapRoom.observationRoom);
+                                    Console.ReadKey();
+                                    break;
 
-                            case ConsoleKey.D5:
-                            case ConsoleKey.NumPad5:
-                                Console.Clear();
-                                Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
-                                switch (Console.ReadKey().Key)
-                                {
-                                    case ConsoleKey.NumPad1:
-                                    case ConsoleKey.D1:
-                                        observationRoom.IsCurrentRoom = false;
-                                        exitGame = true;
-                                        break;
+                                case ConsoleKey.D5:
+                                case ConsoleKey.NumPad5:
+                                    Console.Clear();
+                                    Console.WriteLine("If you exit, all progress will be lost. Are you sure?\n1. Yes\n2. No");
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.NumPad1:
+                                        case ConsoleKey.D1:
+                                            observationRoom.IsCurrentRoom = false;
+                                            exitGame = true;
+                                            break;
 
-                                    case ConsoleKey.NumPad2:
-                                    case ConsoleKey.D2:
-                                        Console.Clear();
-                                        break;
-                                    default:
-                                        Console.Clear();
-                                        break;
-                                }
-                                break;
+                                        case ConsoleKey.NumPad2:
+                                        case ConsoleKey.D2:
+                                            Console.Clear();
+                                            break;
+                                        default:
+                                            Console.Clear();
+                                            break;
+                                    }
+                                    break;
 
-                            default:
-                                Console.Clear();
-                                break;
-                        }//end switch
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }//end switch 
+                        }
                     }//end Observation Room 
                     #endregion
 
@@ -1281,7 +1323,7 @@ namespace Dungeon
                     enemyHasBeenFought = false;
 
                     #region Cargo Bay
-                    while (cargoBay.IsCurrentRoom == true)
+                    while (cargoBay.IsCurrentRoom == true && exitGame != true)
                     {
                         Console.Title = "Cargo Bay";
                         Console.Clear();
@@ -1308,7 +1350,7 @@ namespace Dungeon
                                         Console.ForegroundColor = ConsoleColor.Green;
                                         isFinished = true;
                                         cargoBay.IsCurrentRoom = false;
-                                        score++;
+                                        player.Kills++;
                                     }
                                     break;
 
@@ -1331,25 +1373,31 @@ namespace Dungeon
                             }
                             if (player.Life < 1)
                             {
-                                Console.WriteLine($"You died by the {boss.Name}.\n");
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine($"\nYou died by the {boss.Name}.\nPress any key to continue...");
+                                Console.ReadKey();
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 exitGame = true;
                             }
-                        } while (isFinished != true);
+                        } while (isFinished != true && exitGame != true);
 
-                        Console.WriteLine($"It's over. You rush to the last escape pod, get in, and leave.");
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine("You survived.");
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.ReadKey();
-                        cargoBay.IsCurrentRoom = false;
-                        exitGame = true;
+                        while (cargoBay.IsCurrentRoom == true && exitGame != true)
+                        {
+                            Console.WriteLine($"It's over. You rush to the last escape pod, get in, and leave.");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("You survived.");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.ReadKey();
+                            cargoBay.IsCurrentRoom = false;
+                            exitGame = true; 
+                        }
                     }
                     #endregion
                     
-                } while (start.IsCurrentRoom == true || storage.IsCurrentRoom == true || common.IsCurrentRoom == true || bathroom.IsCurrentRoom == true || mensQuarters.IsCurrentRoom == true || messHall.IsCurrentRoom == true || kitchen.IsCurrentRoom == true || observationRoom.IsCurrentRoom == true || containment.IsCurrentRoom == true || cargoBay.IsCurrentRoom == true);//end while rooms true
+                } while (exitGame != true);//end while rooms true
             } while (exitGame != true);
             Console.Clear();
-            Console.WriteLine($"Your final killcount is: {score}\nThank you for playing!");
+            Console.WriteLine($"Your final killcount is: {player.Kills}\nThank you for playing!");
         }//end Main()
     }//end class
 }//end namespace

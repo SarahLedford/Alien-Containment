@@ -16,8 +16,8 @@ namespace SpecialEnemyLibrary
             IsQueen = isQueen;
             if (IsQueen)
             {
-                MaxDamage += 3;
-                MinDamage += 3;
+                MaxDamage += 5;
+                MinDamage += 5;
                 Block += 10;
             }
         }
