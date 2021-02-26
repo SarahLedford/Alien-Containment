@@ -18,7 +18,7 @@ namespace Dungeon
             bool enemyHasBeenFought = false;
             bool isContainmentClear = false;
 
-            Console.WriteLine("Welcome to my game, and thank you for playing!\nAlien: Containment is created to be a unique experience every time you play. You never know when you're going to meet an enemy, or who it will be.\nYour goal is to reach the cargo bay and survive long enough to kill the alien once and for all.\nEnjoy!\nPress any key to continue...");
+            Console.WriteLine("Welcome to my game, and thank you for playing!\nAlien: Containment is created to be a unique experience every time you play. You never know when you're going to meet an enemy, or who it will be.\nYour goal is to reach the cargo bay and survive long enough to kill the alien once and for all.\nPlease maximize the console window for the best experience. Enjoy!\nPress any key to continue...");
             Console.ReadKey();
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -39,37 +39,47 @@ namespace Dungeon
 
             #region Logo
             Console.WriteLine(@"
-              *    .  *       .             * *    .  *       .             *
-                                     * *   .        *       .       .       
-             *   .        *       .       .       *
-               .     *
-                       .     .  *        *             .  *           *                     
-                   .                .        .
+*   .        *       .     .             * *    .  *       .             * *   .        *       .     .             *     .  *       .             *
+                                     * *   .        *       .       .                                            *                  *       .       .       
+
+*   .        *   .        *       .       .       * *   .        *   .        *       .       .       *  .        *   .                .       .       *
+     .     *      .     *      .     *      .     *      .     *      .     *                 
+                       .     .  *        *             .  *           *                                                  .                   .   *           
+                   .                .        . *    .  *       .             *      .        . *    .  *       .             * 
             .  *           *                     *
-                                         .                   .   *        
-              ___  _ *          .   *                                                  
-             / _ \| (_)                                                                           
+                                         .                   .   *                                                 .                   .   *  
+ .   *        ___  _ *          .   *                                     .  *        *       
+             / _ \| (_)                                                                            *   .        *       .       .       *
             / /_\ \ |_  ___ _ __    *    .  *       .             *                         
             |  _  | | |/ _ \ '_ \  ()                      *                                  
-            | | | | | |  __/ | | |    *   .        *       .       .       *
+  .  *      | | | | | |  __/ | | |    *   .        *       .       .       *  .        *       .       .       *  .        *       .       .       *
             \_| |_/_|_|\___|_| |_| ().     *                                                              
-                       .     .  *        *           .     .  *        *
+ .  *        *                .     .  *        *           .     .  *        *
             .  *           *                     *.  *           *                                        
-             _____   *   .   * _        _                            _   
+     *       _____   *   .   * _        _                            _        *        *   .        *       .       .       * .  *           *               
             /  __ \  .     *  | |      (_) *   .     *     .       *| |  
-            | /  \/ ___  _ __ | |_ __ _ _ _ __  _ __ ___   ___ _ __ | |_ 
-            | |    / _ \| '_ \| __/ _` | | '_ \| '_ ` _ \ / _ \ '_ \| __|
-            | \__/\ (_) | | | | || (_| | | | | | | | | | |  __/ | | | |_ 
-             \____/\___/|_| |_|\__\__,_|_|_| |_|_| |_| |_|\___|_| |_|\__|
-              *    .  *       .             *          *          .   *
-                                     *
-             *   .        *       .       .       * .  *           *                     
-               .     *
-                       .     .  *        *        .                .        .
+ .          | /  \/ ___  _ __ | |_ __ _ _ _ __  _ __ ___   ___ _ __ | |_   .                                        .              *          .   *
+      .     | |    / _ \| '_ \| __/ _` | | '_ \| '_ ` _ \ / _ \ '_ \| __|
+   *        | \__/\ (_) | | | | || (_| | | | | | | | | | |  __/ | | | |_       .                .        .
+       .     \____/\___/|_| |_|\__\__,_|_|_| |_|_| |_| |_|\___|_| |_|\__|                    .                .        .
+    .         *    .  *       .             *          *          .   *
+ .                                    *                                             .                 .     .  *        *        .                .        .
+     *        *   .        *       .       .       * .  *           *                     
+  .             .     *
+      .                 .     .  *        *        .                .        .       .         *    .  *       .             *          *          .   *
                    .                .        .
-            .  *           *                     *
-                                         .              *          .   *
-                     *          .   *
+   *         .  *           *                     *                                   *              *          .   *        *              *          .   *
+ .                                        .              *          .   *
+       *              *          .   *                                          *              *          .   *                       *              *          .   *
+    .         *    .  *       .             *          *          .   *
+ .                                    *                                             .                 .     .  *        *        .                .        .
+     *        *   .        *       .       .       * .  *           *                     
+  .             .     *
+      .                 .     .  *        *        .                .        .       .         *    .  *       .             *          *          .   *
+                   .                .        .
+   *         .  *           *                     *                                   *              *          .   *        *              *          .   *
+ .                                        .              *          .   *
+       *              *          .   *                                          *              *          .   *                       *              *          .   *
             ");
             #endregion
 
@@ -251,6 +261,7 @@ namespace Dungeon
                         #endregion
                         while (storage.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine($"{(player.EquippedWeapon == flamethrower ? $"{storage}\n1. Take flamethrower (already equipped)\n2. Go back to women's quarters\n3. HUD\n4. Map\n5. Exit" : $"{storage}\n1. Take flamethrower\n2. Go back to women's quarters\n3. HUD\n4. Map\n5. Exit")}");
                             switch (Console.ReadKey().Key)
                             {
@@ -260,6 +271,7 @@ namespace Dungeon
                                     Console.WriteLine($"{(player.EquippedWeapon == flamethrower ? "You already have the flamethrower." : "You picked up the flamethrower.")}");
                                     player.EquippedWeapon = flamethrower;
                                     Console.ReadKey();
+                                    Console.Clear();
                                     break;
                                 case ConsoleKey.D2:
                                 case ConsoleKey.NumPad2:
@@ -393,6 +405,7 @@ namespace Dungeon
                         #endregion
                         while (common.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine($"{common}\n" +
                                            $"1. Enter mess hall\n" +
                                            $"2. Enter men's quarters\n" +
@@ -550,6 +563,7 @@ namespace Dungeon
                         #endregion
                         while (bathroom.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine($"{bathroom}\n" +
                                             $"1. Enter men's quarters\n" +
                                             $"2. Enter common area\n" +
@@ -710,6 +724,7 @@ namespace Dungeon
                         #endregion
                         while (mensQuarters.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine($"{mensQuarters}\n" +
                                             $"1. Enter common area\n" +
                                             $"2. Enter mess hall\n" +
@@ -864,6 +879,7 @@ namespace Dungeon
                         #endregion
                         while (messHall.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine($"{messHall}\n" +
                                            $"1. Enter observation room\n" +
                                            $"2. Enter kitchen\n" +
@@ -1023,6 +1039,7 @@ namespace Dungeon
                         #endregion
                         while (kitchen.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine($"{kitchen}\n" +
                                             $"1. Enter cargo bay\n" +
                                             $"2. Go back to mess hall\n" +
@@ -1170,6 +1187,7 @@ namespace Dungeon
                         #endregion
                         while (observationRoom.IsCurrentRoom == true && exitGame != true)
                         {
+                            Console.Clear();
                             Console.WriteLine(observationRoom);
                             Console.Write($"{(player.Life < player.MaxLife ? "You need to get patched up. You see an emergency kit on one of the desks.\nH. Heal\n" : "")}");
                             Console.WriteLine($"1. Enter containment room\n" +
@@ -1349,7 +1367,6 @@ namespace Dungeon
                                         Console.Clear();
                                         Console.ForegroundColor = ConsoleColor.Green;
                                         isFinished = true;
-                                        cargoBay.IsCurrentRoom = false;
                                         player.Kills++;
                                     }
                                     break;
