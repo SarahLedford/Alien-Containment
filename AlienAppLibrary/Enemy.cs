@@ -27,7 +27,7 @@ namespace AlienAppLibrary
 
         public override string ToString()
         {
-            return string.Format($"{Name}\n{Description}\n{(Life == MaxLife ? "It is uninjured." : Life >= MaxLife /2 ? "It seems to be hurt, but now it's angrier." : "It's heavily injured. Now is the time to finish this.")}");
+            return string.Format($"{Name}\n{Description}\n{(Life == MaxLife && Name != "crew mate" ? "It is uninjured." : Life == MaxLife && Name == "crew mate" ? "They are uninjured." : Life >= MaxLife / 2 && Name != "crew mate" ? "It seems to be hurt, but now it's angrier." : Life >= MaxLife / 2 && Name == "crew mate" ? "They seem to be hurt, but now they're angrier." : Life < MaxLife / 2 && Name != "crew mate" ? "It's heavily injured. Now is the time to finish this." : "They are heavily injured. Now's your chance.")}");
         }
 
         public override int CalcDamage()

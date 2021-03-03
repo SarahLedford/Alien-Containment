@@ -20,7 +20,7 @@ namespace AlienAppLibrary
         public override string ToString()
         {
             return string.Format($"Stats\nLife: {Life}/{MaxLife}\n" +
-                $"Weapon: {EquippedWeapon}\nYou have {Kills} kills. When will it end?");
+                $"Weapon: {EquippedWeapon}\n{(Kills == 1 ? $"You have {Kills} kill. When will it end?" : Kills == 0 ? "You have no kills." : $"You have {Kills} kills. When will it end?")}");
         }
 
         public override int CalcHitChance()
